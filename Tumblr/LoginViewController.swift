@@ -1,21 +1,27 @@
 //
-//  HomeViewController.swift
+//  LoginViewController.swift
 //  Tumblr
 //
-//  Created by Sara Lin on 5/26/15.
+//  Created by Sara Lin on 5/30/15.
 //  Copyright (c) 2015 Sara Lin. All rights reserved.
 //
 
 import UIKit
 
-class HomeViewController: UIViewController {
-
-    let transitionManager = TransitionManager()
+class LoginViewController: UIViewController {
     
-    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var emailField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        emailField.becomeFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,12 +29,10 @@ class HomeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        var destinationVC = segue.destinationViewController as! UIViewController
-        destinationVC.modalPresentationStyle = UIModalPresentationStyle.Custom
-        destinationVC.transitioningDelegate = self.transitionManager
+    @IBAction func onPressCancel(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
 
     /*
     // MARK: - Navigation

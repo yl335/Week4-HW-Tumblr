@@ -10,6 +10,9 @@ import UIKit
 
 class TabBarViewController: UIViewController {
     
+    let transitionManager = TransitionManager()
+    
+    @IBOutlet weak var explorePopup: UIImageView!
     @IBOutlet weak var contentView: UIView!
     
     // tab buttons
@@ -35,16 +38,26 @@ class TabBarViewController: UIViewController {
         var storyboard = UIStoryboard(name: "Main", bundle: nil)
         homeViewController = storyboard.instantiateViewControllerWithIdentifier("homeViewController") as! UIViewController
         searchViewController = storyboard.instantiateViewControllerWithIdentifier("searchViewController") as! UIViewController
-        composeViewController = storyboard.instantiateViewControllerWithIdentifier("composeViewController") as! UIViewController
         accountViewController = storyboard.instantiateViewControllerWithIdentifier("accountViewController") as! UIViewController
         trendingViewController = storyboard.instantiateViewControllerWithIdentifier("trendingViewController") as! UIViewController
         
         setActiveTab(homeTabButton, viewController: homeViewController)
+        
+        UIView.animateWithDuration(1, delay: 0, options: .Repeat | .Autoreverse, animations: {
+            self.explorePopup.transform = CGAffineTransformMakeTranslation(0, 10)
+        }, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        var destinationVC = segue.destinationViewController as! UIViewController
+        destinationVC.modalPresentationStyle = UIModalPresentationStyle.Custom
+        destinationVC.transitioningDelegate = self.transitionManager
     }
     
     @IBAction func onPressHomeTab(sender: AnyObject) {
@@ -53,10 +66,7 @@ class TabBarViewController: UIViewController {
     
     @IBAction func onPressSearchTab(sender: AnyObject) {
         setActiveTab(searchTabButton, viewController: searchViewController)
-    }
-    
-    @IBAction func onPressComposeTab(sender: AnyObject) {
-        setActiveTab(searchTabButton, viewController: searchViewController)
+        explorePopup.hidden = true
     }
     
     @IBAction func onPressProfileTab(sender: AnyObject) {
@@ -82,7 +92,7 @@ class TabBarViewController: UIViewController {
         
         tab.selected = true
         
-        for otherTab in [homeTabButton, searchTabButton, composeTabButton, profileTabButton, trendingTabButton] {
+        for otherTab in [homeTabButton, searchTabButton, profileTabButton, trendingTabButton] {
             if otherTab != tab {
                 otherTab.selected = false
             }
